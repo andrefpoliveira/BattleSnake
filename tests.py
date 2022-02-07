@@ -240,5 +240,24 @@ class AvoidBodyTest(unittest.TestCase):
         self.assertTrue("left" not in possible_moves)
         self.assertTrue("right" in possible_moves)
 
+class AvoidSnakesTest(unittest.TestCase):
+    def test_avoid_snake(self):
+        """ It should not be able to move into the snake """
+
+        # Arrange
+        test_head = {"x": 4, "y": 4}
+        test_snakes = [{"body": [{"x": 3, "y": 4}, {"x": 3, "y": 3}, {"x": 4, "y": 3}]}]
+        possible_moves = server_logic.generate_possible_moves(test_head)
+
+        # Act
+        possible_moves = server_logic.avoid_snakes(possible_moves, test_snakes)
+
+        # Assert
+        self.assertEqual(len(possible_moves), 2)
+        self.assertTrue("up" in possible_moves)
+        self.assertTrue("down" not in possible_moves)
+        self.assertTrue("left" not in possible_moves)
+        self.assertTrue("right" in possible_moves)
+
 if __name__ == "__main__":
     unittest.main()

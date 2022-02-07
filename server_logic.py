@@ -35,6 +35,19 @@ def avoid_body(possible_moves: dict, body: list):
 
     return possible_moves
 
+def avoid_snakes(possible_moves: dict, snakes: dict):
+    """ Removes the moves that will collide with other snakes """
+    moves_to_remove = []
+    for snake in snakes:
+        for move in possible_moves:
+            if possible_moves[move] in snake["body"]:
+                moves_to_remove.append(move)
+
+    for move in moves_to_remove:
+        del possible_moves[move]
+
+    return possible_moves
+
 def choose_move(data: dict) -> str:
     """
     data: Dictionary of all Game Board data as received from the Battlesnake Engine.
@@ -54,9 +67,11 @@ def choose_move(data: dict) -> str:
 
     board_width = data["board"]["width"]
     board_height = data["board"]["height"]
+    snakes = data["board"]["snakes"]
 
     possible_moves = avoid_walls(possible_moves, board_width, board_height)
     possible_moves = avoid_body(possible_moves, my_body)
+    possible_moves = avoid_snakes(possible_moves, snakes)
 
     move = random.choice(list(possible_moves.keys()))
 
