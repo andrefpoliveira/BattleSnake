@@ -1,38 +1,27 @@
 import random
-from typing import List, Dict
 
-"""
-This file can be a nice home for your move logic, and to write helper functions.
+def generate_possible_moves(head: dict) -> dict:
+    """ Calculates where the head will be for each of the possible moves """
 
-We have started this for you, with a function to help remove the 'neck' direction
-from the list of possible moves!
-"""
+    x, y = head["x"], head["y"]
+    return {
+        "up": {"x": x, "y": y-1},
+        "down": {"x": x, "y": y+1},
+        "left": {"x": x-1, "y": y},
+        "right": {"x": x+1, "y": y}
+    }
 
+def avoid_walls(possible_moves: dict, width: int, height: int):
+    """ Removes the moves that will collide with walls """
+    moves_to_remove = []
+    for move in possible_moves:
+        if not (0 <= possible_moves[move]["x"] < width and 0 <= possible_moves[move]["y"] < height):
+            moves_to_remove.append(move)
 
-def avoid_my_neck(my_head: Dict[str, int], my_body: List[dict], possible_moves: List[str]) -> List[str]:
-    """
-    my_head: Dictionary of x/y coordinates of the Battlesnake head.
-            e.g. {"x": 0, "y": 0}
-    my_body: List of dictionaries of x/y coordinates for every segment of a Battlesnake.
-            e.g. [ {"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 2, "y": 0} ]
-    possible_moves: List of strings. Moves to pick from.
-            e.g. ["up", "down", "left", "right"]
-
-    return: The list of remaining possible_moves, with the 'neck' direction removed
-    """
-    my_neck = my_body[1]  # The segment of body right after the head is the 'neck'
-
-    if my_neck["x"] < my_head["x"]:  # my neck is left of my head
-        possible_moves.remove("left")
-    elif my_neck["x"] > my_head["x"]:  # my neck is right of my head
-        possible_moves.remove("right")
-    elif my_neck["y"] < my_head["y"]:  # my neck is below my head
-        possible_moves.remove("down")
-    elif my_neck["y"] > my_head["y"]:  # my neck is above my head
-        possible_moves.remove("up")
+    for move in moves_to_remove:
+        del possible_moves[move]
 
     return possible_moves
-
 
 def choose_move(data: dict) -> str:
     """
@@ -46,34 +35,16 @@ def choose_move(data: dict) -> str:
     for each move of the game.
 
     """
+
     my_head = data["you"]["head"]  # A dictionary of x/y coordinates like {"x": 0, "y": 0}
     my_body = data["you"]["body"]  # A list of x/y coordinate dictionaries like [ {"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 2, "y": 0} ]
+    possible_moves = generate_possible_moves(my_head)
 
-    # TODO: uncomment the lines below so you can see what this data looks like in your output!
-    # print(f"~~~ Turn: {data['turn']}  Game Mode: {data['game']['ruleset']['name']} ~~~")
-    # print(f"All board data this turn: {data}")
-    # print(f"My Battlesnakes head this turn is: {my_head}")
-    # print(f"My Battlesnakes body this turn is: {my_body}")
+    board_width = data["board"]["width"]
+    board_height = data["board"]["height"]
 
-    possible_moves = ["up", "down", "left", "right"]
+    possible_moves = avoid_walls(possible_moves, board_width, board_height)
 
-    # Don't allow your Battlesnake to move back in on it's own neck
-    possible_moves = avoid_my_neck(my_head, my_body, possible_moves)
-
-    # TODO: Using information from 'data', find the edges of the board and don't let your Battlesnake move beyond them
-    # board_height = ?
-    # board_width = ?
-
-    # TODO Using information from 'data', don't let your Battlesnake pick a move that would hit its own body
-
-    # TODO: Using information from 'data', don't let your Battlesnake pick a move that would collide with another Battlesnake
-
-    # TODO: Using information from 'data', make your Battlesnake move towards a piece of food on the board
-
-    # Choose a random direction from the remaining possible_moves to move in, and then return that move
-    move = random.choice(possible_moves)
-    # TODO: Explore new strategies for picking a move that are better than random
-
-    print(f"{data['game']['id']} MOVE {data['turn']}: {move} picked from all valid options in {possible_moves}")
+    move = random.choice(list(possible_moves.keys()))
 
     return move
