@@ -1,0 +1,53 @@
+name: Update Ranking (Daily)
+
+# Controls when the workflow will run
+on:
+  schedule:
+    - cron: '0 0 1-25 12 *' # runs at 00:00 UTC from 1-25 December
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Manual Update'     
+        required: true
+        default: 'Manual Update'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9.6' # install the python version needed
+
+      - name: execute py script
+        run: python get_ranking.py
+
+      - name: Verify Changed files
+        uses: tj-actions/verify-changed-files@v8.8
+        id: changed-files
+        with:
+          files: |
+             README.md
+
+      - name: commit files
+        if: contains(steps.changed-files.outputs.changed_files, 'README.md')
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git commit -m "[ACTIONS] Daily Update" -a
+      
+      - name: push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main 
