@@ -4,6 +4,7 @@
    * Avoid Walls
    * Avoid Yourself
    * Avoid Other BattleSnakes
+   * Find Food
 
 # Getting started with [Battlesnake](http://play.battlesnake.com?utm_source=github&utm_medium=readme&utm_campaign=python_starter&utm_content=homepage) and Python
 
