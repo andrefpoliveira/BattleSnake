@@ -48,17 +48,38 @@ def avoid_snakes(possible_moves: dict, snakes: dict):
 
     return possible_moves
 
+def create_board(snakes, width, height):
+    """ Create a board representation """
+    board = [[1 for _ in range(width)] for _ in range(height)]
+    for snake in snakes:
+        for body in snake["body"]:
+            board[height - body["y"] - 1][body["x"]] = 1
+    return board
+    
+def get_closer_to_food(possible_moves: dict, food: list, board: list):
+    """ Find the move that gets the snake closest to food """
+    stack, added = [], []
+    food = [(f["x"], f["y"]) for f in food]
+    for move in possible_moves:
+        stack.append((possible_moves[move]["x"], possible_moves[move]["y"], move))
+
+    while stack:
+        current_x, current_y, initial_dir = stack.pop(0)
+        if (current_x, current_y) in food: return initial_dir
+        for x, y in [(1,0), (-1,0), (0,1), (0,-1)]:
+            dx = current_x + x
+            dy = current_y + y
+
+            if (dx, dy) in food: return initial_dir
+            if not(0 <= dx < len(board[0]) and 0 <= dy < len(board)): continue
+
+            if board[dy][dx] and (dx, dy) not in added:
+                added.append((dx,dy))
+                stack.append((dx, dy, initial_dir))
+
 def choose_move(data: dict) -> str:
     """
-    data: Dictionary of all Game Board data as received from the Battlesnake Engine.
     For a full example of 'data', see https://docs.battlesnake.com/references/api/sample-move-request
-
-    return: A String, the single move to make. One of "up", "down", "left" or "right".
-
-    Use the information in 'data' to decide your next move. The 'data' variable can be interacted
-    with as a Python Dictionary, and contains all of the information about the Battlesnake board
-    for each move of the game.
-
     """
 
     my_head = data["you"]["head"]  # A dictionary of x/y coordinates like {"x": 0, "y": 0}
@@ -68,11 +89,19 @@ def choose_move(data: dict) -> str:
     board_width = data["board"]["width"]
     board_height = data["board"]["height"]
     snakes = data["board"]["snakes"]
+    food = data["board"]["food"]
+
+    board = create_board(snakes, board_width, board_height)
 
     possible_moves = avoid_walls(possible_moves, board_width, board_height)
     possible_moves = avoid_body(possible_moves, my_body)
     possible_moves = avoid_snakes(possible_moves, snakes)
 
-    move = random.choice(list(possible_moves.keys()))
+    move = get_closer_to_food(possible_moves, food, board)
+
+    if move == None:
+        move = "up"
+        if len(possible_moves) > 0:
+            move = random.choice(list(possible_moves.keys()))
 
     return move
