@@ -3,6 +3,7 @@
  * Training Program
    * Avoid Walls
    * Avoid Yourself
+   * Avoid Other BattleSnakes
 
 # Getting started with [Battlesnake](http://play.battlesnake.com?utm_source=github&utm_medium=readme&utm_campaign=python_starter&utm_content=homepage) and Python
 
