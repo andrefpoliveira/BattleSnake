@@ -5,8 +5,8 @@ def generate_possible_moves(head: dict) -> dict:
 
     x, y = head["x"], head["y"]
     return {
-        "up": {"x": x, "y": y-1},
-        "down": {"x": x, "y": y+1},
+        "up": {"x": x, "y": y+1},
+        "down": {"x": x, "y": y-1},
         "left": {"x": x-1, "y": y},
         "right": {"x": x+1, "y": y}
     }

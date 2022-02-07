@@ -26,8 +26,8 @@ class GeneratePossibleMoves(unittest.TestCase):
 
         # Assert
         self.assertEqual(len(possible_moves), 4)
-        self.assertEqual(possible_moves["up"], {"x": 4, "y": 3})
-        self.assertEqual(possible_moves["down"], {"x": 4, "y": 5})
+        self.assertEqual(possible_moves["up"], {"x": 4, "y": 5})
+        self.assertEqual(possible_moves["down"], {"x": 4, "y": 3})
         self.assertEqual(possible_moves["left"], {"x": 3, "y": 4})
         self.assertEqual(possible_moves["right"], {"x": 5, "y": 4})
 
@@ -57,7 +57,7 @@ class AvoidWallsTest(unittest.TestCase):
         # Arrange
         width = 11
         height = 11
-        test_head = {"x": 4, "y": 0}
+        test_head = {"x": 4, "y": height-1}
         possible_moves = server_logic.generate_possible_moves(test_head)
 
         # Act
@@ -76,7 +76,7 @@ class AvoidWallsTest(unittest.TestCase):
         # Arrange
         width = 11
         height = 11
-        test_head = {"x": 4, "y": height-1}
+        test_head = {"x": 4, "y": 0}
         possible_moves = server_logic.generate_possible_moves(test_head)
 
         # Act
@@ -133,7 +133,7 @@ class AvoidWallsTest(unittest.TestCase):
         # Arrange
         width = 11
         height = 11
-        test_head = {"x": 0, "y": 0}
+        test_head = {"x": 0, "y": height-1}
         possible_moves = server_logic.generate_possible_moves(test_head)
 
         # Act
@@ -152,7 +152,7 @@ class AvoidWallsTest(unittest.TestCase):
         # Arrange
         width = 11
         height = 11
-        test_head = {"x": width-1, "y": 0}
+        test_head = {"x": width-1, "y": height-1}
         possible_moves = server_logic.generate_possible_moves(test_head)
 
         # Act
@@ -171,7 +171,7 @@ class AvoidWallsTest(unittest.TestCase):
         # Arrange
         width = 11
         height = 11
-        test_head = {"x": 0, "y": height-1}
+        test_head = {"x": 0, "y": 0}
         possible_moves = server_logic.generate_possible_moves(test_head)
 
         # Act
@@ -190,7 +190,7 @@ class AvoidWallsTest(unittest.TestCase):
         # Arrange
         width = 11
         height = 11
-        test_head = {"x": width-1, "y": height-1}
+        test_head = {"x": width-1, "y": 0}
         possible_moves = server_logic.generate_possible_moves(test_head)
 
         # Act
@@ -235,8 +235,8 @@ class AvoidBodyTest(unittest.TestCase):
 
         # Assert
         self.assertEqual(len(possible_moves), 2)
-        self.assertTrue("up" not in possible_moves)
-        self.assertTrue("down" in possible_moves)
+        self.assertTrue("up" in possible_moves)
+        self.assertTrue("down" not in possible_moves)
         self.assertTrue("left" not in possible_moves)
         self.assertTrue("right" in possible_moves)
 
