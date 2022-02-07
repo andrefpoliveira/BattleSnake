@@ -1,3 +1,9 @@
+# KoalaSnake
+## Challenges Passed
+ * Training Program
+   * Avoid Walls
+   * Avoid Yourself
+
 # Getting started with [Battlesnake](http://play.battlesnake.com?utm_source=github&utm_medium=readme&utm_campaign=python_starter&utm_content=homepage) and Python
 
 ![Battlesnake Logo](https://media.battlesnake.com/social/StarterSnakeGitHubRepos_Python.png)
