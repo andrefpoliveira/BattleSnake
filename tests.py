@@ -203,5 +203,42 @@ class AvoidWallsTest(unittest.TestCase):
         self.assertTrue("left" in possible_moves)
         self.assertTrue("right" not in possible_moves)
 
+class AvoidBodyTest(unittest.TestCase):
+    def test_avoid_neck(self):
+        """ It should not be able to move back """
+
+        # Arrange
+        test_head = {"x": 4, "y": 4}
+        test_body = [{"x": 3, "y": 4}, {"x": 2, "y": 4}]
+        possible_moves = server_logic.generate_possible_moves(test_head)
+
+        # Act
+        possible_moves = server_logic.avoid_body(possible_moves, test_body)
+
+        # Assert
+        self.assertEqual(len(possible_moves), 3)
+        self.assertTrue("up" in possible_moves)
+        self.assertTrue("down" in possible_moves)
+        self.assertTrue("left" not in possible_moves)
+        self.assertTrue("right" in possible_moves)
+
+    def test_avoid_rest_body(self):
+        """ Should avoid the rest of the body aswell """
+
+        # Arrange
+        test_head = {"x": 4, "y": 4}
+        test_body = [{"x": 3, "y": 4}, {"x": 3, "y": 3}, {"x": 4, "y": 3}]
+        possible_moves = server_logic.generate_possible_moves(test_head)
+
+        # Act
+        possible_moves = server_logic.avoid_body(possible_moves, test_body)
+
+        # Assert
+        self.assertEqual(len(possible_moves), 2)
+        self.assertTrue("up" not in possible_moves)
+        self.assertTrue("down" in possible_moves)
+        self.assertTrue("left" not in possible_moves)
+        self.assertTrue("right" in possible_moves)
+
 if __name__ == "__main__":
     unittest.main()

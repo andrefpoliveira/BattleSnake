@@ -23,6 +23,18 @@ def avoid_walls(possible_moves: dict, width: int, height: int):
 
     return possible_moves
 
+def avoid_body(possible_moves: dict, body: list):
+    """ Removes the moves that will collide with self """
+    moves_to_remove = []
+    for move in possible_moves:
+        if possible_moves[move] in body:
+            moves_to_remove.append(move)
+
+    for move in moves_to_remove:
+        del possible_moves[move]
+
+    return possible_moves
+
 def choose_move(data: dict) -> str:
     """
     data: Dictionary of all Game Board data as received from the Battlesnake Engine.
@@ -44,6 +56,7 @@ def choose_move(data: dict) -> str:
     board_height = data["board"]["height"]
 
     possible_moves = avoid_walls(possible_moves, board_width, board_height)
+    possible_moves = avoid_body(possible_moves, my_body)
 
     move = random.choice(list(possible_moves.keys()))
 
