@@ -14,15 +14,88 @@ import unittest
 
 import server_logic
 
+class ConvertCoordinatesWrappedTest(unittest.TestCase):
+    def test_other_mode(self):
+        """ Should ignore the conversion """
+
+        # Arrange
+        width, height = 11, 11
+        test_coordinates = {"x": -1, "y": 4}
+        gamemode = "standard"
+
+        # Act
+        coordinates = server_logic.convert_coordinates_wrapped_mode(test_coordinates, width, height, gamemode)
+
+        # Assert
+        self.assertEqual(coordinates, test_coordinates)
+
+    def test_wrapped_outside_left(self):
+        """ Should convert to the other side """
+
+        # Arrange
+        width, height = 11, 11
+        test_coordinates = {"x": -1, "y": 4}
+        gamemode = "wrapped"
+
+        # Act
+        coordinates = server_logic.convert_coordinates_wrapped_mode(test_coordinates, width, height, gamemode)
+
+        # Assert
+        self.assertEqual(coordinates, {"x": width - 1, "y": 4})
+
+    def test_wrapped_outside_right(self):
+        """ Should convert to the other side """
+
+        # Arrange
+        width, height = 11, 11
+        test_coordinates = {"x": width, "y": 4}
+        gamemode = "wrapped"
+
+        # Act
+        coordinates = server_logic.convert_coordinates_wrapped_mode(test_coordinates, width, height, gamemode)
+
+        # Assert
+        self.assertEqual(coordinates, {"x": 0, "y": 4})
+
+    def test_wrapped_outside_up(self):
+        """ Should convert to the down side """
+
+        # Arrange
+        width, height = 11, 11
+        test_coordinates = {"x": 4, "y": height}
+        gamemode = "wrapped"
+
+        # Act
+        coordinates = server_logic.convert_coordinates_wrapped_mode(test_coordinates, width, height, gamemode)
+
+        # Assert
+        self.assertEqual(coordinates, {"x": 4, "y": 0})
+
+    def test_wrapped_outside_down(self):
+        """ Should convert to the upper side """
+
+        # Arrange
+        width, height = 11, 11
+        test_coordinates = {"x": 4, "y": -1}
+        gamemode = "wrapped"
+
+        # Act
+        coordinates = server_logic.convert_coordinates_wrapped_mode(test_coordinates, width, height, gamemode)
+
+        # Assert
+        self.assertEqual(coordinates, {"x": 4, "y": height-1})
+
 class GeneratePossibleMoves(unittest.TestCase):
     def test_generate_moves(self):
         """ Should generate 4 moves """
 
         # Arrange
         test_head = {"x": 4, "y": 4}
+        width, height = 11, 11
+        gamemode = "standard"
 
         # Act
-        possible_moves = server_logic.generate_possible_moves(test_head)
+        possible_moves = server_logic.generate_possible_moves(test_head, gamemode, width, height)
 
         # Assert
         self.assertEqual(len(possible_moves), 4)
@@ -39,7 +112,9 @@ class AvoidWallsTest(unittest.TestCase):
         width = 11
         height = 11
         test_head = {"x": 4, "y": 4}
-        possible_moves = server_logic.generate_possible_moves(test_head)
+        gamemode = "standard"
+        
+        possible_moves = server_logic.generate_possible_moves(test_head, gamemode, width, height)
 
         # Act
         possible_moves = server_logic.avoid_walls(possible_moves, width, height)
@@ -58,7 +133,9 @@ class AvoidWallsTest(unittest.TestCase):
         width = 11
         height = 11
         test_head = {"x": 4, "y": height-1}
-        possible_moves = server_logic.generate_possible_moves(test_head)
+        gamemode = "standard"
+
+        possible_moves = server_logic.generate_possible_moves(test_head, gamemode, width, height)
 
         # Act
         possible_moves = server_logic.avoid_walls(possible_moves, width, height)
@@ -77,7 +154,8 @@ class AvoidWallsTest(unittest.TestCase):
         width = 11
         height = 11
         test_head = {"x": 4, "y": 0}
-        possible_moves = server_logic.generate_possible_moves(test_head)
+        gamemode = "standard"
+        possible_moves = server_logic.generate_possible_moves(test_head, gamemode, width, height)
 
         # Act
         possible_moves = server_logic.avoid_walls(possible_moves, width, height)
@@ -96,7 +174,9 @@ class AvoidWallsTest(unittest.TestCase):
         width = 11
         height = 11
         test_head = {"x": 0, "y": 4}
-        possible_moves = server_logic.generate_possible_moves(test_head)
+        gamemode = "standard"
+
+        possible_moves = server_logic.generate_possible_moves(test_head, gamemode, width, height)
 
         # Act
         possible_moves = server_logic.avoid_walls(possible_moves, width, height)
@@ -115,7 +195,9 @@ class AvoidWallsTest(unittest.TestCase):
         width = 11
         height = 11
         test_head = {"x": width-1, "y": 4}
-        possible_moves = server_logic.generate_possible_moves(test_head)
+        gamemode = "standard"
+
+        possible_moves = server_logic.generate_possible_moves(test_head, gamemode, width, height)
 
         # Act
         possible_moves = server_logic.avoid_walls(possible_moves, width, height)
@@ -134,7 +216,9 @@ class AvoidWallsTest(unittest.TestCase):
         width = 11
         height = 11
         test_head = {"x": 0, "y": height-1}
-        possible_moves = server_logic.generate_possible_moves(test_head)
+        gamemode = "standard"
+
+        possible_moves = server_logic.generate_possible_moves(test_head, gamemode, width, height)
 
         # Act
         possible_moves = server_logic.avoid_walls(possible_moves, width, height)
@@ -153,7 +237,9 @@ class AvoidWallsTest(unittest.TestCase):
         width = 11
         height = 11
         test_head = {"x": width-1, "y": height-1}
-        possible_moves = server_logic.generate_possible_moves(test_head)
+        gamemode = "standard"
+
+        possible_moves = server_logic.generate_possible_moves(test_head, gamemode, width, height)
 
         # Act
         possible_moves = server_logic.avoid_walls(possible_moves, width, height)
@@ -172,7 +258,9 @@ class AvoidWallsTest(unittest.TestCase):
         width = 11
         height = 11
         test_head = {"x": 0, "y": 0}
-        possible_moves = server_logic.generate_possible_moves(test_head)
+        gamemode = "standard"
+
+        possible_moves = server_logic.generate_possible_moves(test_head, gamemode, width, height)
 
         # Act
         possible_moves = server_logic.avoid_walls(possible_moves, width, height)
@@ -191,7 +279,9 @@ class AvoidWallsTest(unittest.TestCase):
         width = 11
         height = 11
         test_head = {"x": width-1, "y": 0}
-        possible_moves = server_logic.generate_possible_moves(test_head)
+        gamemode = "standard"
+
+        possible_moves = server_logic.generate_possible_moves(test_head, gamemode, width, height)
 
         # Act
         possible_moves = server_logic.avoid_walls(possible_moves, width, height)
@@ -210,7 +300,10 @@ class AvoidBodyTest(unittest.TestCase):
         # Arrange
         test_head = {"x": 4, "y": 4}
         test_body = [{"x": 3, "y": 4}, {"x": 2, "y": 4}]
-        possible_moves = server_logic.generate_possible_moves(test_head)
+        gamemode = "standard"
+        width, height = 11, 11
+
+        possible_moves = server_logic.generate_possible_moves(test_head, gamemode, width, height)
 
         # Act
         possible_moves = server_logic.avoid_body(possible_moves, test_body)
@@ -228,7 +321,10 @@ class AvoidBodyTest(unittest.TestCase):
         # Arrange
         test_head = {"x": 4, "y": 4}
         test_body = [{"x": 3, "y": 4}, {"x": 3, "y": 3}, {"x": 4, "y": 3}]
-        possible_moves = server_logic.generate_possible_moves(test_head)
+        gamemode = "standard"
+        width, height = 11, 11
+
+        possible_moves = server_logic.generate_possible_moves(test_head, gamemode, width, height)
 
         # Act
         possible_moves = server_logic.avoid_body(possible_moves, test_body)
@@ -247,7 +343,10 @@ class AvoidSnakesTest(unittest.TestCase):
         # Arrange
         test_head = {"x": 4, "y": 4}
         test_snakes = [{"body": [{"x": 3, "y": 4}, {"x": 3, "y": 3}, {"x": 4, "y": 3}]}]
-        possible_moves = server_logic.generate_possible_moves(test_head)
+        gamemode = "standard"
+        width, height = 11, 11
+        
+        possible_moves = server_logic.generate_possible_moves(test_head, gamemode, width, height)
 
         # Act
         possible_moves = server_logic.avoid_snakes(possible_moves, test_snakes)

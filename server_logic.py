@@ -1,14 +1,19 @@
 import random
 
-def generate_possible_moves(head: dict) -> dict:
-    """ Calculates where the head will be for each of the possible moves """
+def convert_coordinates_wrapped_mode(coordinates: dict, width: int, height: int, gamemode: str) -> dict:
+    """ Convert coordinates outside of board to inside if playing wrapped """
+    if gamemode != "wrapped": return coordinates
+    x, y = coordinates["x"], coordinates["y"]
+    return {"x": x % width, "y": y % height}
 
+def generate_possible_moves(head: dict, gamemode: str, width: int, height: int) -> dict:
+    """ Calculates where the head will be for each of the possible moves """
     x, y = head["x"], head["y"]
     return {
-        "up": {"x": x, "y": y+1},
-        "down": {"x": x, "y": y-1},
-        "left": {"x": x-1, "y": y},
-        "right": {"x": x+1, "y": y}
+        "up": convert_coordinates_wrapped_mode({"x": x, "y": y+1}, width, height, gamemode),
+        "down": convert_coordinates_wrapped_mode({"x": x, "y": y-1}, width, height, gamemode),
+        "left": convert_coordinates_wrapped_mode({"x": x-1, "y": y}, width, height, gamemode),
+        "right": convert_coordinates_wrapped_mode({"x": x+1, "y": y}, width, height, gamemode)
     }
 
 def avoid_walls(possible_moves: dict, width: int, height: int):
@@ -56,7 +61,7 @@ def create_board(snakes, width, height):
             board[height - body["y"] - 1][body["x"]] = 1
     return board
     
-def get_closer_to_food(possible_moves: dict, food: list, board: list):
+def get_closer_to_food(possible_moves: dict, food: list, board: list, gamemode: str):
     """ Find the move that gets the snake closest to food """
     stack, added = [], []
     food = [(f["x"], f["y"]) for f in food]
@@ -71,7 +76,7 @@ def get_closer_to_food(possible_moves: dict, food: list, board: list):
             dy = current_y + y
 
             if (dx, dy) in food: return initial_dir
-            if not(0 <= dx < len(board[0]) and 0 <= dy < len(board)): continue
+            if gamemode != "wrapped" and not(0 <= dx < len(board[0]) and 0 <= dy < len(board)): continue
 
             if board[dy][dx] and (dx, dy) not in added:
                 added.append((dx,dy))
@@ -81,23 +86,28 @@ def choose_move(data: dict) -> str:
     """
     For a full example of 'data', see https://docs.battlesnake.com/references/api/sample-move-request
     """
+    
+    gamemode = data["game"]["ruleset"]["name"]
 
     my_head = data["you"]["head"]  # A dictionary of x/y coordinates like {"x": 0, "y": 0}
     my_body = data["you"]["body"]  # A list of x/y coordinate dictionaries like [ {"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 2, "y": 0} ]
-    possible_moves = generate_possible_moves(my_head)
-
+    
     board_width = data["board"]["width"]
     board_height = data["board"]["height"]
     snakes = data["board"]["snakes"]
     food = data["board"]["food"]
+    
+    possible_moves = generate_possible_moves(my_head, gamemode, board_width, board_height)
 
     board = create_board(snakes, board_width, board_height)
 
-    possible_moves = avoid_walls(possible_moves, board_width, board_height)
+    if gamemode != "wrapped":
+        possible_moves = avoid_walls(possible_moves, board_width, board_height)
+    
     possible_moves = avoid_body(possible_moves, my_body)
     possible_moves = avoid_snakes(possible_moves, snakes)
 
-    move = get_closer_to_food(possible_moves, food, board)
+    move = get_closer_to_food(possible_moves, food, board, gamemode)
 
     if move == None:
         move = "up"

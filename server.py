@@ -39,7 +39,7 @@ def handle_start():
     """
     data = request.get_json()
 
-    print(f"{data['game']['id']} START")
+    print(f"{data['game']['id']} {data['game']['ruleset']['name']} START")
     return "ok"
 
 
