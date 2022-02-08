@@ -72,11 +72,12 @@ def get_closer_to_food(possible_moves: dict, food: list, board: list, gamemode: 
         current_x, current_y, initial_dir = stack.pop(0)
         if (current_x, current_y) in food: return initial_dir
         for x, y in [(1,0), (-1,0), (0,1), (0,-1)]:
-            dx = current_x + x
-            dy = current_y + y
+            
+            coordinates = convert_coordinates_wrapped_mode({"x": current_x + x, "y": current_y + y}, len(board[0]), len(board), gamemode)
+            dx, dy = coordinates["x"], coordinates["y"]
 
             if (dx, dy) in food: return initial_dir
-            if gamemode != "wrapped" and not(0 <= dx < len(board[0]) and 0 <= dy < len(board)): continue
+            if not(0 <= dx < len(board[0]) and 0 <= dy < len(board)): continue
 
             if board[dy][dx] and (dx, dy) not in added:
                 added.append((dx,dy))
