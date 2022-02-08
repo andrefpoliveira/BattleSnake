@@ -28,11 +28,11 @@ jobs:
         with:
           python-version: '3.9.6' # install the python version needed
 
-      - name: execute py script
-        run: python get_ranking.py
-
       - name: install dependencies
         run: pip install -r requirements.txt
+
+      - name: execute py script
+        run: python get_ranking.py
 
       - name: Verify Changed files
         uses: tj-actions/verify-changed-files@v8.8
