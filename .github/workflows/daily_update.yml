@@ -31,6 +31,9 @@ jobs:
       - name: execute py script
         run: python get_ranking.py
 
+      - name: install dependencies
+        run: pip install -r requirements.txt
+
       - name: Verify Changed files
         uses: tj-actions/verify-changed-files@v8.8
         id: changed-files
