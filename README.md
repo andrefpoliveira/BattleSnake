@@ -3,7 +3,7 @@
 ## Ranking (Updated once a day)
 | Gamemode | Current Place | Best Place | Total Players |
 |:--------:|:-------------:|:----------:|:-------------:|
-| Global Arena | 531 | 531 | 541 |
+| Global Arena | 529 | 529 | 543 |
 
 ## Challenges Passed
  * Training Program
