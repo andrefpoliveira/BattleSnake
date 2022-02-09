@@ -24,7 +24,8 @@ def avoid_walls(possible_moves: dict, width: int, height: int):
             moves_to_remove.append(move)
 
     for move in moves_to_remove:
-        del possible_moves[move]
+        if move in possible_moves:
+            del possible_moves[move]
 
     return possible_moves
 
@@ -36,7 +37,8 @@ def avoid_body(possible_moves: dict, body: list):
             moves_to_remove.append(move)
 
     for move in moves_to_remove:
-        del possible_moves[move]
+        if move in possible_moves:
+            del possible_moves[move]
 
     return possible_moves
 
@@ -49,7 +51,8 @@ def avoid_snakes(possible_moves: dict, snakes: dict):
                 moves_to_remove.append(move)
 
     for move in moves_to_remove:
-        del possible_moves[move]
+        if move in possible_moves:
+            del possible_moves[move]
 
     return possible_moves
 
@@ -85,20 +88,22 @@ def get_closer_to_food(possible_moves: dict, food: list, board: list, gamemode: 
                 stack.append((dx, dy, initial_dir))
 
 def avoid_head_to_head(possible_moves: dict, snakes: list, length: int, id: str, gamemode: str, width: int, height: int):
-  """ Avoids the collision head to head with stronger snakes """
-  moves_to_remove = []
-  for move in possible_moves:
-    for snake in snakes:
-      if snake["id"] == id: continue
-      if snake["length"] < length: continue
-      poss_moves_snake = generate_possible_moves(snake["head"], gamemode, width, height)
-      for s_move in poss_moves_snake:
-        if possible_moves[move] == poss_moves_snake[s_move]:
-          moves_to_remove.append(move)
-  for move in moves_to_remove:
-    del possible_moves[move]
+    """ Avoids the collision head to head with stronger snakes """
+    moves_to_remove = []
+    for move in possible_moves:
+        for snake in snakes:
+            if snake["id"] == id: continue
+            if snake["length"] < length: continue
+            poss_moves_snake = generate_possible_moves(snake["head"], gamemode, width, height)
+            for s_move in poss_moves_snake:
+                if possible_moves[move] == poss_moves_snake[s_move]:
+                    moves_to_remove.append(move)
 
-  return possible_moves
+    for move in moves_to_remove:
+        if move in possible_moves:
+            del possible_moves[move]
+
+    return possible_moves
 
 def choose_move(data: dict) -> str:
     """
