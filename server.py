@@ -3,11 +3,13 @@ import os
 
 from flask import Flask
 from flask import request
+from flask_cors import CORS
 
 import server_logic
 
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.get("/")

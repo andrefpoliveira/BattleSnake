@@ -1,3 +1,4 @@
 Flask==2.0.1
 requests-html==0.10.0
 bs4==0.0.1
+Flask-Cors==3.0.10
