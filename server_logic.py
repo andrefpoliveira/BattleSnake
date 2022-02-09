@@ -84,6 +84,22 @@ def get_closer_to_food(possible_moves: dict, food: list, board: list, gamemode: 
                 added.append((dx,dy))
                 stack.append((dx, dy, initial_dir))
 
+def avoid_head_to_head(possible_moves: dict, snakes: list, length: int, id: str, gamemode: str, width: int, height: int):
+  """ Avoids the collision head to head with stronger snakes """
+  moves_to_remove = []
+  for move in possible_moves:
+    for snake in snakes:
+      if snake["id"] == id: continue
+      if snake["length"] < length: continue
+      poss_moves_snake = generate_possible_moves(snake["head"], gamemode, width, height)
+      for s_move in poss_moves_snake:
+        if possible_moves[move] == poss_moves_snake[s_move]:
+          moves_to_remove.append(move)
+  for move in moves_to_remove:
+    del possible_moves[move]
+
+  return possible_moves
+
 def choose_move(data: dict) -> str:
     """
     For a full example of 'data', see https://docs.battlesnake.com/references/api/sample-move-request
@@ -93,6 +109,8 @@ def choose_move(data: dict) -> str:
 
     my_head = data["you"]["head"]  # A dictionary of x/y coordinates like {"x": 0, "y": 0}
     my_body = data["you"]["body"]  # A list of x/y coordinate dictionaries like [ {"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 2, "y": 0} ]
+    my_length = data["you"]["length"]
+    my_id = data["you"]["id"]
     
     board_width = data["board"]["width"]
     board_height = data["board"]["height"]
@@ -108,6 +126,8 @@ def choose_move(data: dict) -> str:
     
     possible_moves = avoid_body(possible_moves, my_body)
     possible_moves = avoid_snakes(possible_moves, snakes)
+    
+    possible_moves = avoid_head_to_head(possible_moves, snakes, my_length, my_id, gamemode, board_width, board_height)
 
     move = get_closer_to_food(possible_moves, food, board, gamemode)
 

@@ -358,5 +358,50 @@ class AvoidSnakesTest(unittest.TestCase):
         self.assertTrue("left" not in possible_moves)
         self.assertTrue("right" in possible_moves)
 
+class AvoidSnakesHead(unittest.TestCase):
+    def test_avoid_collision(self):
+        """ It should not move to square in the middle """
+
+        # Arrange
+        test_head = {"x": 4, "y": 4}
+        test_snake = [{"id": "2", "head": {"x": 2, "y": 4}, "length": 3}]
+        #test_snakes = [{"body": [{"x": 3, "y": 4}, {"x": 3, "y": 3}, {"x": 4, "y": 3}]}]
+        gamemode = "standard"
+        width, height = 11, 11
+        
+        possible_moves = server_logic.generate_possible_moves(test_head, gamemode, width, height)
+
+        # Act
+        possible_moves = server_logic.avoid_head_to_head(possible_moves, test_snake, 3, "1", gamemode, width, height)
+
+        # Assert
+        self.assertEqual(len(possible_moves), 3)
+        self.assertTrue("up" in possible_moves)
+        self.assertTrue("down" in possible_moves)
+        self.assertTrue("left" not in possible_moves)
+        self.assertTrue("right" in possible_moves)
+
+    def test_dont_avoid_collision(self):
+        """ It should be able to move to square in the middle """
+
+        # Arrange
+        test_head = {"x": 4, "y": 4}
+        test_snake = [{"id": "2", "head": {"x": 2, "y": 4}, "length": 3}]
+        #test_snakes = [{"body": [{"x": 3, "y": 4}, {"x": 3, "y": 3}, {"x": 4, "y": 3}]}]
+        gamemode = "standard"
+        width, height = 11, 11
+        
+        possible_moves = server_logic.generate_possible_moves(test_head, gamemode, width, height)
+
+        # Act
+        possible_moves = server_logic.avoid_head_to_head(possible_moves, test_snake, 4, "1", gamemode, width, height)
+
+        # Assert
+        self.assertEqual(len(possible_moves), 4)
+        self.assertTrue("up" in possible_moves)
+        self.assertTrue("down" in possible_moves)
+        self.assertTrue("left" in possible_moves)
+        self.assertTrue("right" in possible_moves)
+
 if __name__ == "__main__":
     unittest.main()
