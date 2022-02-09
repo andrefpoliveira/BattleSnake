@@ -63,6 +63,7 @@ def create_board(snakes, width, height):
     
 def get_closer_to_food(possible_moves: dict, food: list, board: list, gamemode: str):
     """ Find the move that gets the snake closest to food """
+    width, height = len(board[0]), len(board)
     stack, added = [], []
     food = [(f["x"], f["y"]) for f in food]
     for move in possible_moves:
@@ -72,12 +73,12 @@ def get_closer_to_food(possible_moves: dict, food: list, board: list, gamemode: 
         current_x, current_y, initial_dir = stack.pop(0)
         if (current_x, current_y) in food: return initial_dir
         for x, y in [(1,0), (-1,0), (0,1), (0,-1)]:
-            
-            coordinates = convert_coordinates_wrapped_mode({"x": current_x + x, "y": current_y + y}, len(board[0]), len(board), gamemode)
+
+            coordinates = convert_coordinates_wrapped_mode({"x": current_x + x, "y": current_y + y}, width, height, gamemode)
             dx, dy = coordinates["x"], coordinates["y"]
 
             if (dx, dy) in food: return initial_dir
-            if not(0 <= dx < len(board[0]) and 0 <= dy < len(board)): continue
+            if not(0 <= dx < width and 0 <= dy < height): continue
 
             if board[dy][dx] and (dx, dy) not in added:
                 added.append((dx,dy))
