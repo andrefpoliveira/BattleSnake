@@ -44,17 +44,17 @@ with open("README.md") as f:
 ranking_line = get_idx_of_line(lines, "## Ranking (Updated once a day)")
 end_of_table = get_idx_of_line(lines, "", ranking_line)
 for i in range(ranking_line+3, end_of_table):
-    _, arena, _, best_rank, _, _ = lines[i].split("|")
+    _, arena, previous_rank, best_rank, _, _ = lines[i].split("|")
     arena_name, arena_result, total_players = find_current_result(arena.strip(), results)
     
     if arena_name != None:
-        lines[i] = f"| {arena_name} | {arena_result} | {arena_result if arena_result < int(best_rank.strip()) else best_rank.strip()} | {total_players} |\n"
+        lines[i] = f"| {arena_name} | {arena_result} | {arena_result if arena_result < int(best_rank.strip()) else best_rank.strip()} | {arena_result - int(previous_rank)} | {total_players} |\n"
         del results[arena_name]
 
 counter = 0
 for k in results:
     if results[k][0] != None:
-        lines.insert(end_of_table + counter, f"| {k} | {results[k][0]} | {results[k][0]} | {results[k][1]} |\n")
+        lines.insert(end_of_table + counter, f"| {k} | {results[k][0]} | {results[k][0]} | 0 | {results[k][1]} |\n")
         counter += 1
 
 with open("README.md", "w") as f:

@@ -1,11 +1,11 @@
 # KoalaSnake
 
 ## Ranking (Updated once a day)
-| Gamemode | Current Place | Best Place | Total Players |
-|:--------:|:-------------:|:----------:|:-------------:|
-| Global Arena | 457 | 457 | 544 |
-| Global Duels | 319 | 319 | 323 |
-| Global Wrapped | 37 | 37 | 50 |
+| Gamemode | Current Place | Best Place | Ranking Difference | Total Players |
+|:--------:|:-------------:|:----------:|:------------------:|:-------------:|
+| Global Arena | 399 | 399 | -58 | 544 |
+| Global Duels | 319 | 319 | 0 | 323 |
+| Global Wrapped | 30 | 30 | -7 | 50 |
 
 ## Challenges Passed
  * Training Program
