@@ -44,7 +44,7 @@ with open("README.md") as f:
 ranking_line = get_idx_of_line(lines, "## Ranking (Updated once a day)")
 end_of_table = get_idx_of_line(lines, "", ranking_line)
 for i in range(ranking_line+3, end_of_table):
-    _, arena, previous_rank, best_rank, _, _ = lines[i].split("|")
+    _, arena, previous_rank, best_rank, _, _, _ = lines[i].split("|")
     arena_name, arena_result, total_players = find_current_result(arena.strip(), results)
     
     if arena_name != None:
