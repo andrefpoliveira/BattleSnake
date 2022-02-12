@@ -7,13 +7,6 @@
 | Global Duels | 313 | 313 | -1 | 320 |
 | Global Wrapped | 27 | 27 | -9 | 48 |
 
-## Challenges Passed
- * Training Program
-   * Avoid Walls
-   * Avoid Yourself
-   * Avoid Other BattleSnakes
-   * Find Food
-
 # Getting started with [Battlesnake](http://play.battlesnake.com?utm_source=github&utm_medium=readme&utm_campaign=python_starter&utm_content=homepage) and Python
 
 ![Battlesnake Logo](https://media.battlesnake.com/social/StarterSnakeGitHubRepos_Python.png)
