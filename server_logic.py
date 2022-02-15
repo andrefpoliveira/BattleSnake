@@ -61,9 +61,15 @@ def create_board(snakes, width, height):
     board = [[1 for _ in range(width)] for _ in range(height)]
     for snake in snakes:
         for body in snake["body"]:
-            board[height - body["y"] - 1][body["x"]] = 1
+            board[height - body["y"] - 1][body["x"]] = 0
     return board
     
+def print_board(board):
+    print("---")
+    for row in board:
+        print(''.join([str(x) for x in row]))
+    print("---")
+
 def get_closer_to_food(possible_moves: dict, food: list, board: list, gamemode: str):
     """ Find the move that gets the snake closest to food """
     width, height = len(board[0]), len(board)
@@ -82,8 +88,7 @@ def get_closer_to_food(possible_moves: dict, food: list, board: list, gamemode: 
 
             if (dx, dy) in food: return initial_dir
             if not(0 <= dx < width and 0 <= dy < height): continue
-
-            if board[dy][dx] and (dx, dy) not in added:
+            if board[height-1-dy][dx] and (dx, dy) not in added:
                 added.append((dx,dy))
                 stack.append((dx, dy, initial_dir))
 
