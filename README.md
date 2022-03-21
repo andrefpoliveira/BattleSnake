@@ -3,8 +3,8 @@
 ## Ranking (Updated once a day)
 | Gamemode | Current Place | Best Place | Ranking Difference | Total Players |
 |:--------:|:-------------:|:----------:|:------------------:|:-------------:|
-| Global Arena | 124 | 104 | -6 | 600 |
-| Global Duels | 281 | 281 | -1 | 362 |
-| Global Wrapped | 24 | 17 | -9 | 59 |
-| Global Royale | 111 | 100 | 2 | 211 |
+| Global Arena | 112 | 104 | -12 | 594 |
+| Global Duels | 280 | 280 | -1 | 362 |
+| Global Wrapped | 35 | 17 | 11 | 62 |
+| Global Royale | 126 | 100 | 15 | 211 |
 
